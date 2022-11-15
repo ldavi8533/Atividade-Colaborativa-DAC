@@ -1,0 +1,155 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+
+<h:head>
+    <title>PESSOAS JSF</title>
+    <style>
+        body{
+            margin: 0;
+            font-family: Mukta,sans-serif;
+            background: #efefef;
+        }
+
+        li{
+            list-style-type: none;
+            margin: 0 20px;
+        }
+        ul{
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+        nav{
+            display: flex;
+            justify-content: space-around;
+            background: 	#fd0;
+            border-bottom: 2px solid black;
+            width: 100wv;
+            color: #24282b;
+        }
+
+        .container{
+            padding: 40px 40px;
+        }
+
+        #formulario{
+            width: 700px;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+            border-radius: 4px;
+            padding: 10px;
+            align-self: center;
+            margin: 20px auto;
+}
+        .card {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card h4 {
+            margin: 0 10px;
+        }
+
+        #formTable {
+            margin: 0 10px;
+        }
+        input{
+            width: 200px !important;
+        }
+        .item{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+    </style>
+
+
+</h:head>
+<h:body>
+    <nav>
+        <h1>Listagem</h1>
+        <ul>
+            <li><a href="./faces/pessoa/pessoa.xhtml">Pessoa</a> <br /></li>
+            <li><a href="./faces/index.xhtml">Dependente</a></li>
+        </ul>
+    </nav>
+
+
+    <h:form id="formulario">
+        <h3 style="text-align: center">Cadastro De Pessoa</h3>
+        <div class="card">
+            <div class="ui-fluid formgrid grid" style="margin: 0 140px;">
+                <div class="item">
+                    <h:outputLabel value="Id"/>
+                    <p:inputText value="#{pessoaController.pessoa.id}" readonly="true"/>
+                </div>
+
+                <div class="item">
+                    <h:outputLabel value="nome"/>
+                    <p:inputText value="#{pessoaController.pessoa.nome}"/>
+                </div>
+
+
+                <div class="field col-12 md:col-4">
+                    <div class="item">
+                        <h:outputLabel value="Data de Lancamento:" for="dataDeLancamento"/>
+                        <p:datePicker id="dataDeLancamento" value="#{pessoaController.pessoa.dataDeLancamento}"
+                                      pattern="dd/MM/yyyy">
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="Date"/>
+                        </p:datePicker>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <h:outputLabel value="codigo dependente:"/>
+                    <p:inputText id="codigoDependente" value="#{pessoaController.pessoa.dependente.codigo}"/>
+                </div>
+
+
+                <div>
+                    <h:commandButton action="#{pessoaController.salvar()}" value="Salvar pessoa" update=":formTable"/>
+                    <h:commandButton action="#{pessoaController.limpar()}" value="Limpar" update=":formTable" />
+                </div>
+            </div>
+        </div>
+
+    </h:form>
+
+    <h:form id="formTable">
+        <h3 style="text-align: center">Listagem de dependentes</h3>
+        <p:dataTable value="#{pessoaController.listar()}" var="pessoa" rowKey="#{pessoa.id}"
+                     selection="#{pessoaController.pessoaSelecionado}" selectionMode="single">
+            <p:column>
+                <f:facet name="header">Id:</f:facet>
+                #{pessoa.id}
+            </p:column>
+            <p:column>
+                <f:facet name="header">Nome:</f:facet>
+                <h:outputText value="#{pessoa.nome}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">dependente</f:facet>
+                <h:outputText value="#{pessoa.dependente.nomeFantasia}"/>
+            </p:column>
+            <p:column>
+                <p:commandButton action="#{pessoaController.editar(pessoa)}" value="editar" update=":formulario"/>
+            </p:column>
+            <p:column>
+                <p:commandButton action="#{pessoaController.excluir(pessoa)}" value="excluir" update=":formTable"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</h:body>
+
+</html>
+

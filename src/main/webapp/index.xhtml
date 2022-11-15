@@ -1,0 +1,158 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+<h:head>
+    <!-- <h:outputStylesheet library="css" name="geral.css" /> -->
+
+    <style>
+        body{
+            margin: 0;
+            font-family: Mukta,sans-serif;
+            background: #efefef;
+        }
+
+        li{
+            list-style-type: none;
+            margin: 0 20px;
+        }
+        ul{
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+        nav{
+            display: flex;
+            justify-content: space-around;
+            background: 	#fd0;
+            border-bottom: 2px solid black;
+            width: 100wv;
+            color: #24282b;
+        }
+
+        .container{
+            padding: 40px 40px;
+        }
+
+        #formulario{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: white;
+            padding: 10px;
+            margin: 20px;
+            box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        span#search {
+            margin-bottom: 20px;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #formulario:input {
+            padding: 0;
+        }
+
+        #form:j_idt12{
+            text-align: center;
+        }
+
+        input {
+            margin: 0 10px;
+        }
+        .card h4 {
+            margin: 0 10px;
+        }
+        #form {
+            margin: 0 10px;
+        }
+    </style>
+</h:head>
+
+
+
+<h:body>
+
+
+    <nav>
+        <h1>Listagem</h1>
+        <ul>
+            <li><a href="./faces/pessoa/pessoa.xhtml">Pessoas</a> <br /></li>
+            <li><a href="./faces/index.xhtml">dependente</a></li>
+        </ul>
+    </nav>
+
+    <div class="card" >
+        <h:form id="formulario">
+            <h4>UUID</h4>
+            <p:inputText id="ID" value="#{dependenteController.dependente.codigo}" readonly="true"/>
+
+            <h4>Nome </h4>
+            <p:inputText id="nome" value="#{dependenteController.dependente.nome}" placeholder="Nome " />
+
+            <h4>Data de Nascimento</h4>
+            <p:inputText id="dataDeNascimento" value="#{dependenteController.dependente.dataDeNascimento}" required="true" placeholder="Data de Nascimento"/>
+
+            <div>
+                <h:commandButton action="#{dependenteController.salvardependente()}" value="Salvar pessoa" update=":form"/>
+                <h:commandButton action="#{dependenteController.limpar()}" value="Limpar" update=":formulario" />
+            </div>
+
+        </h:form>
+    </div>
+
+    <h2 style="text-align: center">Lista de dependentes</h2>
+    <span class="ui-input-icon-left" id="search">
+                <i class="pi pi-search" />
+                <p:inputText placeholder="Filtrar por nome" />
+            </span>
+
+    <h:form id="form">
+        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+
+        <div class="card">
+
+            <p:dataTable id="basicDT" value="#{dependenteController.listar()}" var="dependente">
+                <p:column headerText="Code">
+                    <f:facet name="header">Codigo</f:facet>
+                    #{dependente.codigo}
+                </p:column>
+
+                <p:column headerText="Name">
+                    <f:facet name="header">Data de Nascimento</f:facet>
+                    #{dependente.dataDeNascimento}
+                </p:column>
+
+                <p:column headerText="Data de Nascimento">
+                    <f:facet name="header">Nome </f:facet>
+                    #{dependente.nome}
+                </p:column>
+
+                <p:column style="width: 6rem" >
+
+                    <p:commandButton icon="pi pi-pencil" update=":formulario"
+                                     oncomplete="PF('manageProductDialog').show()"
+                                     styleClass="edit-button rounded-button ui-button-success"
+                                     action="#{dependenteController.editar(dependente)}" value="" >
+                    </p:commandButton>
+
+                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                     oncomplete="PF('deleteProductDialog').show()"
+                                     action="#{dependenteController.excluir(dependente)}" value="" update=":form">
+                    </p:commandButton>
+
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+
+
+</h:body>
+</html>
